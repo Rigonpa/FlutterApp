@@ -14,3 +14,4 @@ linter:
     unrelated_type_equality_checks: false
     # better to have this deactivetd for beginners
     prefer_const_constructors: true
+    avoid_classes_with_only_static_members: false
