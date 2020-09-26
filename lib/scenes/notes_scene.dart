@@ -1,11 +1,15 @@
+import 'package:EverPobre/domain/note.dart';
 import 'package:EverPobre/domain/notebook.dart';
+import 'package:EverPobre/scenes/detail_scene.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class NotesListView extends StatefulWidget {
-  final Notebook _model;
+final Notebook model = Notebook.testDataBuilder();
 
-  const NotesListView(Notebook model) : _model = model;
+class NotesListView extends StatefulWidget {
+  static final routeName = "/notesList";
+
+  final Notebook _model = model;
 
   @override
   _NotesListViewState createState() => _NotesListViewState();
@@ -30,16 +34,27 @@ class _NotesListViewState extends State<NotesListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget._model.length,
-      itemBuilder: (context, index) {
-        return NoteSliver(widget._model, index);
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Everpobre"),
+      ),
+      body: ListView.builder(
+        itemCount: widget._model.length,
+        itemBuilder: (context, index) {
+          return NoteSliver(widget._model, index);
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          model.add(Note(content: "Una nueva nota"));
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
 
-class NoteSliver extends StatelessWidget {
+class NoteSliver extends StatefulWidget {
   final Notebook notebook;
   final int index;
   const NoteSliver(Notebook notebook, int index)
@@ -47,14 +62,39 @@ class NoteSliver extends StatelessWidget {
         this.index = index;
 
   @override
-  Widget build(BuildContext context) {
-    DateFormat fmt = DateFormat("yyyy-mm-dd");
+  _NoteSliverState createState() => _NoteSliverState();
+}
 
-    return Card(
-      child: ListTile(
-        leading: const Icon(Icons.toc),
-        title: Text(notebook[index].body),
-        subtitle: Text(fmt.format(notebook[index].updatedDate)),
+class _NoteSliverState extends State<NoteSliver> {
+  @override
+  Widget build(BuildContext context) {
+    final DateFormat fmt = DateFormat("yyyy-mm-dd");
+
+    return Dismissible(
+      key: UniqueKey(),
+      onDismissed: (direction) {
+        widget.notebook.removeAt(widget.index);
+        setState(() {});
+        Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text("Element ${widget.index} has been deleted!")));
+      },
+      background: Container(
+        color: Colors.red,
+      ),
+      child: InkWell(
+        onTap: () {
+          print("Pasar a la vista detalle de esta nota");
+          Navigator.pushNamed(context, NoteDetailView.routeName,
+              arguments: widget.notebook[widget.index]);
+        },
+        child: Card(
+          child: ListTile(
+            leading: const Icon(Icons.toc),
+            title: Text(widget.notebook[widget.index].body),
+            subtitle:
+                Text(fmt.format(widget.notebook[widget.index].updatedDate)),
+          ),
+        ),
       ),
     );
   }
