@@ -11,6 +11,10 @@ class NoteDetailView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.black,
+            onPressed: () => Navigator.pop(context)),
         title: Text("Note's detail"),
       ),
       body: Container(
