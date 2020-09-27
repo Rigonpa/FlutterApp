@@ -11,7 +11,7 @@ class Notebooks with ChangeNotifier {
   // Constructors
   Notebooks();
   Notebooks.loadData() {
-    _notebooks.addAll(List.generate(15, (index) {
+    _notebooks.addAll(List.generate(7, (index) {
       return Notebook.testDataBuilder();
     }));
   }

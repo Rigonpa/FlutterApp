@@ -1,4 +1,6 @@
+import 'package:EverPobre/domain/notebook.dart';
 import 'package:EverPobre/domain/notebooks.dart';
+import 'package:EverPobre/scenes/notes_scene.dart';
 import 'package:flutter/material.dart';
 
 final Notebooks model = Notebooks.loadData();
@@ -32,15 +34,21 @@ class _NotebooksListViewState extends State<NotebooksListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Notebooks"),
-        ),
-        body: ListView.builder(
-          itemCount: widget.m.length,
-          itemBuilder: (context, index) {
-            return NotebookSliver(widget.m, index);
-          },
-        ));
+      appBar: AppBar(
+        title: Text("Notebooks"),
+      ),
+      body: ListView.builder(
+        itemCount: widget.m.length,
+        itemBuilder: (context, index) {
+          return NotebookSliver(widget.m, index);
+        },
+      ),
+      floatingActionButton: IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            widget.m.add(Notebook.testDataBuilder());
+          }),
+    );
   }
 }
 
@@ -69,10 +77,16 @@ class _NotebookSliverState extends State<NotebookSliver> {
         widget.notebooks.removeAt(widget.index);
         setState(() {});
       },
-      child: Card(
-        child: ListTile(
-          leading: Icon(Icons.book),
-          title: Text("Notebook ${noteb[widget.index].body}"),
+      child: InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, NotesListView.routeName,
+              arguments: widget.notebooks[widget.index]);
+        },
+        child: Card(
+          child: ListTile(
+            leading: Icon(Icons.book),
+            title: Text("Notebook ${noteb[widget.index].body}"),
+          ),
         ),
       ),
     );

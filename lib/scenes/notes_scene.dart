@@ -83,7 +83,6 @@ class _NoteSliverState extends State<NoteSliver> {
       ),
       child: InkWell(
         onTap: () {
-          print("Pasar a la vista detalle de esta nota");
           Navigator.pushNamed(context, NoteDetailView.routeName,
               arguments: widget.notebook[widget.index]);
         },

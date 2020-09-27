@@ -11,7 +11,7 @@ class Notebook extends ChangeNotifier {
   // Constructores
   Notebook();
   Notebook.testDataBuilder() {
-    _notes.addAll(List.generate(100, (index) => Note(content: "Item $index")));
+    _notes.addAll(List.generate(7, (index) => Note(content: "Item $index")));
   }
 
   // Accesores
